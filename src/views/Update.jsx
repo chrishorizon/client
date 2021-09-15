@@ -1,17 +1,19 @@
-import React, {useState} from 'react'
-import { useHistory } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import {useParams, useHistory} from 'react-router-dom'
 import axios from 'axios'
 
-const Create = () => {
-
-    const history = useHistory();
-    const [validState, setValidState] = useState({});
+const Update = () => {
     
-    const [formState, setFormState] = useState({
-        title: "",
-        price: -1,
-        description: ""
-    });
+    const [validState, setValidState] = useState({});
+    const history = useHistory();
+    const [formState, setFormState] = useState({});
+    const {id} = useParams();
+    
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/product/${id}`)
+            .then(res => setFormState(res.data))
+            .catch(err => console.log(err))
+    })
 
     const changeHandler = (e) => {
         const {name, value} = e.target;
@@ -23,9 +25,9 @@ const Create = () => {
 
     const submitHandler = e => {
         e.preventDefault();
-        axios.post("http://localhost:8000/api/products", formState)
+        axios.put(`http://localhost:8000/api/products/${id}`, formState)
             .then(res => {
-                history.push("/")
+                history.push(`/products/${id}`)
             })
             .catch(err => {
                 const {errors} = err.response.data
@@ -42,23 +44,23 @@ const Create = () => {
             <form onSubmit={submitHandler}>
                 <p>
                     Title:
-                    <input type="text" name="title" id="" onChange={changeHandler} value={formState.title} />
+                    <input type="text" name="title" onChange={changeHandler} value={formState.title} />
                     {(validState.title) ? <p style={{color: "red"}} >{validState.title}</p> : null }
                 </p>
                 <p>
                     Price:
-                    <input type="number" name="price" id="" onChange={changeHandler} value={formState.price} />
+                    <input type="number" name="price" onChange={changeHandler} value={formState.price}/>
                     {(validState.price) ? <p style={{color: "red"}} >{validState.price}</p> : null }
                 </p>
                 <p>
                     Description:
-                    <input type="text" name="description" id="" onChange={changeHandler} value={formState.description} />
+                    <input type="text" name="description" onChange={changeHandler} value={formState.description} />
                     {(validState.description) ? <p style={{color: "red"}} >{validState.description}</p> : null }
                 </p>
-                <button type="submit" >Create</button>
+                <button type="submit" >Update</button>
             </form>
         </div>
     )
 }
 
-export default Create
+export default Update
