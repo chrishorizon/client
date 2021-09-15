@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 
 const Create = () => {
 
-    const history = useHistory();
+    // const history = useHistory();
     const [validState, setValidState] = useState({});
     
     const [formState, setFormState] = useState({
@@ -25,7 +25,12 @@ const Create = () => {
         e.preventDefault();
         axios.post("http://localhost:8000/api/products", formState)
             .then(res => {
-                history.push("/")
+                setFormState({
+                    title: "",
+                    price: -1,
+                    description: ""
+                })
+                // history.push("/")
             })
             .catch(err => {
                 const {errors} = err.response.data

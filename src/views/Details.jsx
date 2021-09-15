@@ -30,7 +30,7 @@ const Details = () => {
                     <h1>Description: {productState.description}</h1>
                     <Link to={`/products/${productState._id}/edit`}>Edit</Link>
                     <button onClick={deleteHandler}>Delete</button>
-                    <button onClick={() => history.push("/")}>Create Product</button>
+                    <button onClick={() => history.push("/")}>Home</button>
                 </> : <h2>Loading...</h2>
             }
         </div>

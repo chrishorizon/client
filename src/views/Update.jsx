@@ -6,14 +6,15 @@ const Update = () => {
     
     const [validState, setValidState] = useState({});
     const history = useHistory();
-    const [formState, setFormState] = useState({});
+    const [formState, setFormState] = useState({})
+
     const {id} = useParams();
     
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/product/${id}`)
+        axios.get(`http://localhost:8000/api/products/${id}`)
             .then(res => setFormState(res.data))
             .catch(err => console.log(err))
-    })
+    }, [])
 
     const changeHandler = (e) => {
         const {name, value} = e.target;
@@ -58,6 +59,7 @@ const Update = () => {
                     {(validState.description) ? <p style={{color: "red"}} >{validState.description}</p> : null }
                 </p>
                 <button type="submit" >Update</button>
+                <button onClick={() => history.push("/")}>Home</button>
             </form>
         </div>
     )

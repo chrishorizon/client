@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import axios from "axios"
+import ProductList from '../components/ProductList'
+
 
 const Dashboard = () => {
     const [products, setProducts] = useState([])
@@ -23,16 +25,8 @@ const Dashboard = () => {
             <ul>
                 {
                     products.map((product, i) => {
-                        return(
-                            <>
-                            <li key={i}>
-                                <Link to={`/products/${product._id}`}>
-                                    {product.title}
-                                </Link>
-                            </li>
-                            <button onClick={() => deleteHandler(product._id)}>Delete</button>
-                            </>
-                        )
+                        return <ProductList key={i} i={i} product={product} deleteHandler={deleteHandler}
+                        />
                     })
                 }
             </ul>
