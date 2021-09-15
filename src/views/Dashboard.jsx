@@ -1,35 +1,37 @@
 import React, {useState, useEffect} from 'react'
-// import { Link } from 'react-router-dom'
 import axios from "axios"
 import ProductList from '../components/ProductList'
+import Create from '../components/Create';
 
 
 const Dashboard = () => {
+
     const [products, setProducts] = useState([])
-    const [dlt, setDlt] = useState(false)
+    const [loaded, setLoaded] = useState(false)
+    const [created, setCreated] = useState(false);
 
     useEffect(() => {
         axios.get("http://localhost:8000/api/products")
-            .then(res => setProducts(res.data))
+            .then(res => {
+                setProducts(res.data);
+                setLoaded(true);
+            })
             .catch(err => console.log(err))
-    }, [dlt])
+    }, [created]);
 
-    const deleteHandler = (id) => {
-        axios.delete(`http://localhost:8000/api/products/${id}`)
-            .then(res => setDlt(!dlt))
-            .catch(err => console.log(err))
+    const newCreate = () => {
+        setCreated(!created)
+    }
+
+    const removeFromDom = id => {
+        setProducts(products.filter(product => product._id != id))
     }
 
     return (
         <div>
-            <ul>
-                {
-                    products.map((product, i) => {
-                        return <ProductList key={i} i={i} product={product} deleteHandler={deleteHandler}
-                        />
-                    })
-                }
-            </ul>
+            <Create newCreate={newCreate}/>
+            <hr/>
+            {loaded && <ProductList products={products} removeFromDom={removeFromDom} /> }
         </div>
     )
 }
